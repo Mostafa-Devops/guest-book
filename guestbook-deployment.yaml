@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guestbook
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: guestbook
+  template:
+    metadata:
+      labels:
+        app: guestbook
+    spec:
+      containers:
+      - name: guestbook
+        image: k8s.gcr.io/guestbook:v3
+        ports:
+        - containerPort: 3000  # <-- container listens on 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: guestbook
+  namespace: default
+spec:
+  selector:
+    app: guestbook
+  ports:
+    - port: 80        # <-- service port exposed to cluster
+      targetPort: 3000  # <-- matches containerPort
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: guestbook-ingress
+  namespace: default
+spec:
+  ingressClassName: haproxy
+  rules:
+    - host: hq2-alb-k8s-poc-240493718.eu-west-1.elb.amazonaws.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: guestbook
+                port:
+                  number: 80
