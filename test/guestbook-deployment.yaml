@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: guestbook
-        image: k8s.gcr.io/guestbook:v3
+        image: nginxdemos/hello:latest
         ports:
         - containerPort: 3000  # <-- container listens on 3000
 
