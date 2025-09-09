@@ -3,10 +3,7 @@ kind: Deployment
 metadata:
   name: guestbook
   namespace: default
-  annotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '80'
-    prometheus.io/path: '/'
+  # ❌ Remove annotations from here
 spec:
   replicas: 3
   selector:
@@ -21,7 +18,7 @@ spec:
       - name: guestbook
         image: k8s.gcr.io/guestbook:v3
         ports:
-        - containerPort: 3000  # <-- container listens on 3000
+        - containerPort: 3000
 
 ---
 apiVersion: v1
@@ -29,12 +26,16 @@ kind: Service
 metadata:
   name: guestbook
   namespace: default
+  annotations:
+    prometheus.io/scrape: 'true'        # ✅ Move annotations here
+    prometheus.io/port: '80'            # ✅ Move annotations here
+    prometheus.io/path: '/'             # ✅ Move annotations here
 spec:
   selector:
     app: guestbook
   ports:
-    - port: 80        # <-- service port exposed to cluster
-      targetPort: 3000  # <-- matches containerPort
+    - port: 80
+      targetPort: 3000
   type: ClusterIP
 
 ---
