@@ -42,7 +42,7 @@ metadata:
 spec:
   ingressClassName: haproxy
   rules:
-    - host: hq2-alb-k8s-poc-1134058164.eu-west-1.elb.amazonaws.com
+    - host: hq2-alb-k8s-poc-1462786957.eu-west-1.elb.amazonaws.com
       http:
         paths:
           - path: /
