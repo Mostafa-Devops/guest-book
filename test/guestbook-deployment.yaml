@@ -25,6 +25,10 @@ kind: Service
 metadata:
   name: guestbook
   namespace: default
+annotations:
+  prometheus.io/scrape: 'true'
+  prometheus.io/port: '80'
+  prometheus.io/path: '/'
 spec:
   selector:
     app: guestbook
